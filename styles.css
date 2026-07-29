@@ -200,3 +200,10 @@ section p { line-height: 1.8; }
 .terminal-cursor { animation: blink 1.1s step-end infinite; color: var(--accent); margin-left: .08em; }
 
 .skill-list { font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; }
+
+/* Dedicated terminal cursor animation */
+@keyframes terminal-cursor-blink {
+0%, 49% { opacity: 1; }
+50%, 100% { opacity: 0; }
+}
+.terminal-cursor { animation: terminal-cursor-blink .9s steps(1, end) infinite; display: inline-block; }
