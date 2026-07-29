@@ -192,3 +192,11 @@ section p { line-height: 1.8; }
 @media (max-width: 48rem) {
 .game-card + .game-card { margin-top: 2.75rem; padding-top: 2.75rem; }
 }
+
+/* Hero summary emphasis */
+.hero-summary { color: #eef5ff; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.05rem, 2vw, 1.3rem); font-style: italic; letter-spacing: .01em; line-height: 1.75; max-width: 58ch; }
+
+
+.terminal-cursor { animation: blink 1.1s step-end infinite; color: var(--accent); margin-left: .08em; }
+
+.skill-list { font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; }
