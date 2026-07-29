@@ -237,3 +237,79 @@ section p { line-height: 1.8; }
 
 /* Fine-tune Snake shell to Dino spacing */
 #games .game-card:first-child .game-shell { margin-bottom: 1.25rem; }
+
+.social-links { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
+.social-badge { background: var(--panel-soft); border: 1px solid #3b6a91; border-radius: 999px; color: var(--text); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .86rem; padding: .45rem .85rem; text-decoration: none; transition: border-color .2s ease, color .2s ease, transform .2s ease; }
+.social-badge::before { color: var(--accent); content: "↗ "; }
+.social-badge:hover, .social-badge:focus-visible { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+/* CV-style social badges */
+.social-badge { border-radius: .35rem; font-size: .82rem; font-weight: 700; letter-spacing: .01em; padding: .5rem .8rem; }
+.social-badge::before { display: inline-block; font-family: Arial, sans-serif; font-size: .78rem; font-weight: 800; margin-right: .4rem; }
+.linkedin-badge { background: #0a66c2; border-color: #0a66c2; color: #fff; }
+.linkedin-badge::before { content: "in"; }
+.github-badge { background: #24292f; border-color: #57606a; color: #fff; }
+.github-badge::before { content: "<>"; }
+.linkedin-badge:hover, .linkedin-badge:focus-visible { background: #084f96; border-color: #084f96; color: #fff; }
+.github-badge:hover, .github-badge:focus-visible { background: #3b434b; border-color: #8b949e; color: #fff; }
+
+/* Theme switcher */
+:root[data-theme="light"] { color-scheme: light; --bg: #f6f8fb; --panel: #ffffff; --panel-soft: #edf3f8; --line: #ccd8e5; --muted: #536579; --text: #172436; --accent: #087f5b; --blue: #075985; --yellow: #9a6700; color: var(--text); background: var(--bg); }
+:root[data-theme="light"] body { background: var(--bg); }
+:root[data-theme="light"] .site-header { background: rgba(246, 248, 251, .92); }
+:root[data-theme="light"] h1, :root[data-theme="light"] h2 { color: #172436; }
+.theme-toggle { background: transparent; border: 1px solid var(--line); border-radius: .4rem; color: var(--text); cursor: pointer; font: inherit; min-width: 2.45rem; padding: .45rem .65rem; }
+.theme-toggle:hover, .theme-toggle:focus-visible { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 48rem) {
+.theme-toggle { margin-left: .5rem; }
+}
+
+/* Intuitive theme switch */
+.theme-toggle { align-items: center; border: 0; display: inline-flex; padding: .2rem; }
+.theme-switch-track { background: #172d49; border: 1px solid #3b6a91; border-radius: 999px; display: inline-flex; height: 1.55rem; padding: .15rem; transition: background .2s ease, border-color .2s ease; width: 2.9rem; }
+.theme-switch-thumb { background: #f8d477; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,.35); display: block; height: 1.05rem; transform: translateX(0); transition: transform .2s ease, background .2s ease; width: 1.05rem; }
+.theme-toggle.is-light .theme-switch-track { background: #dbeafe; border-color: #7aa7c7; }
+.theme-toggle.is-light .theme-switch-thumb { background: #0a66c2; transform: translateX(1.3rem); }
+.theme-toggle:hover .theme-switch-track, .theme-toggle:focus-visible .theme-switch-track { border-color: var(--accent); }
+.site-header .brand { order: 1; }
+.site-header nav { order: 2; }
+.site-header .theme-toggle { margin-left: 0; order: 4; }
+@media (max-width: 48rem) {
+.site-header nav { order: 4; }
+.site-header .menu-toggle { margin-left: auto; order: 2; }
+.site-header .theme-toggle { margin-left: .35rem; order: 3; }
+}
+
+/* Sun and moon indicators inside the theme switch */
+.theme-switch-track { align-items: center; justify-content: space-between; position: relative; }
+.theme-switch-track::before, .theme-switch-track::after { align-items: center; color: #f8d477; display: flex; font-size: .78rem; height: 1rem; justify-content: center; line-height: 1; width: 1rem; }
+.theme-switch-track::before { content: "☀"; }
+.theme-switch-track::after { color: #dce7f5; content: "☾"; }
+.theme-switch-thumb { position: absolute; left: .15rem; top: .15rem; z-index: 1; }
+.theme-toggle.is-light .theme-switch-thumb { left: auto; right: .15rem; }
+.theme-toggle.is-light .theme-switch-track::before { color: #d28b00; }
+.theme-toggle.is-light .theme-switch-track::after { color: #7aa7c7; }
+
+/* Keep the light-mode thumb inside the track */
+.theme-toggle.is-light .theme-switch-thumb { transform: none; }
+
+/* Light-theme text contrast overrides */
+:root[data-theme="light"] .hero-summary { color: #26384a; }
+:root[data-theme="light"] .terminal-line { color: #536579; }
+:root[data-theme="light"] .game-help { color: #536579; }
+
+/* Developer-style typography for profile sections */
+#experience, #education, #skills, #research { font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; }
+
+/* Readable wrapping for long patent titles */
+#research .patent-title { display: block; line-height: 1.7; overflow-wrap: anywhere; }
+@media (max-width: 60rem) {
+#research .patent-item { display: block; }
+#research .patent-id { display: inline-block; margin-top: .65rem; }
+}
+
+/* Compact patent title typography */
+#research .patent-title { font-size: clamp(.78rem, 1.05vw, .92rem); letter-spacing: -.025em; }
+@media (max-width: 40rem) {
+#research .patent-title { font-size: .8rem; letter-spacing: -.02em; }
+}

@@ -1,5 +1,23 @@
 "use strict";
 (() => {
+  const themeToggle = document.querySelector(".theme-toggle");
+  const applyTheme = (theme) => {
+    document.documentElement.dataset.theme = theme;
+    if (themeToggle) {
+      const light = theme === "light";
+      themeToggle.classList.toggle("is-light", light);
+      themeToggle.setAttribute("aria-label", light ? "Switch to dark mode" : "Switch to light mode");
+      themeToggle.setAttribute("aria-pressed", String(light));
+    }
+  };
+  let savedTheme = "dark";
+  try { savedTheme = localStorage.getItem("site-theme") || "dark"; } catch (_) {}
+  applyTheme(savedTheme);
+  if (themeToggle) themeToggle.addEventListener("click", () => {
+    const nextTheme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+    applyTheme(nextTheme);
+    try { localStorage.setItem("site-theme", nextTheme); } catch (_) {}
+  });
   const header = document.querySelector(".site-header");
   const menuToggle = document.querySelector(".menu-toggle");
   const nav = document.querySelector("#primary-navigation");
