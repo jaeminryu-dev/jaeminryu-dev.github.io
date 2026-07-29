@@ -13,6 +13,18 @@
       menuToggle.setAttribute("aria-expanded", "false");
     }));
   }
+  const summary = document.querySelector(".hero-summary");
+  if (summary) {
+    const text = summary.dataset.text || summary.textContent.trim();
+    summary.textContent = "";
+    let index = 0;
+    const typeSummary = () => {
+      summary.textContent = text.slice(0, index);
+      index += 1;
+      if (index <= text.length) window.setTimeout(typeSummary, 32);
+    };
+    window.setTimeout(typeSummary, 450);
+  }
   const c = document.querySelector("#game-board");
   if (!c) return;
   const x = c.getContext("2d"), n = 21, u = c.width / n;

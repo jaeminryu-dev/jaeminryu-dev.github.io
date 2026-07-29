@@ -225,3 +225,15 @@ section p { line-height: 1.8; }
 @media (max-width: 48rem) {
 .game-card + .game-card { margin-top: 1.25rem; padding-top: 1.25rem; }
 }
+
+/* Increase the visual gap from Snake game area to Dino title */
+.game-card + .game-card { margin-top: 4rem; padding-top: 3rem; }
+@media (max-width: 48rem) {
+.game-card + .game-card { margin-top: 4rem; padding-top: 3rem; }
+}
+
+/* Direct separation after the Snake game shell */
+#games .game-card:first-child .game-shell { margin-bottom: 3rem; }
+
+/* Fine-tune Snake shell to Dino spacing */
+#games .game-card:first-child .game-shell { margin-bottom: 1.25rem; }
