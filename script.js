@@ -43,6 +43,22 @@
     };
     window.setTimeout(typeSummary, 450);
   }
+  const revealSections = document.querySelectorAll("main > section:not(.hero)");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+    revealSections.forEach((section) => section.classList.add("is-visible"));
+  } else {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: .15, rootMargin: "0px 0px -8%" });
+    revealSections.forEach((section) => {
+      section.classList.add("scroll-reveal");
+      revealObserver.observe(section);
+    });
+  }
   const c = document.querySelector("#game-board");
   if (!c) return;
   const x = c.getContext("2d"), n = 21, u = c.width / n;
