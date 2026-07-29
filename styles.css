@@ -207,3 +207,21 @@ section p { line-height: 1.8; }
 50%, 100% { opacity: 0; }
 }
 .terminal-cursor { animation: terminal-cursor-blink .9s steps(1, end) infinite; display: inline-block; }
+
+/* Keep the mobile hero name on one line */
+@media (max-width: 48rem) {
+.hero h1 { font-size: clamp(2rem, 10vw, 4.5rem); letter-spacing: -.09em; white-space: nowrap; }
+.hero h1::before { margin-right: .02em; }
+}
+
+/* Extra vertical breathing room between game articles */
+.game-card + .game-card { margin-top: 5rem; padding-top: 4rem; }
+@media (max-width: 48rem) {
+.game-card + .game-card { margin-top: 4rem; padding-top: 3.25rem; }
+}
+
+/* Match the gap before Dino with the game title spacing */
+.game-card + .game-card { margin-top: 1.25rem; padding-top: 1.25rem; }
+@media (max-width: 48rem) {
+.game-card + .game-card { margin-top: 1.25rem; padding-top: 1.25rem; }
+}
