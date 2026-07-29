@@ -5,18 +5,22 @@
   const x = c.getContext("2d"), n = 21, u = c.width / n;
   const score = document.querySelector("#score"), bestEl = document.querySelector("#high-score"), stateEl = document.querySelector("#game-status");
   const start = document.querySelector("#start-game"), pause = document.querySelector("#pause-game"), restart = document.querySelector("#restart-game");
-  let timer, live = false, paused = false, ended = false, points = 0, best = Number(localStorage.getItem("snake-best") || 0), snake, dir, next, food, enemies;
+  const storage = {
+    getBest() { try { return Number(localStorage.getItem("snake-best") || 0); } catch (_) { return 0; } },
+    setBest(value) { try { localStorage.setItem("snake-best", value); } catch (_) {} }
+  };
+  let timer, live = false, paused = false, ended = false, points = 0, best = storage.getBest(), snake, dir, next, food, enemies;
   const cell = () => ({x: Math.floor(Math.random() * n), y: Math.floor(Math.random() * n)});
   const same = (a,b) => a.x === b.x && a.y === b.y;
   const hud = (s) => { score.textContent = points; bestEl.textContent = best; stateEl.textContent = s; };
   const used = (p) => snake.some((z) => same(z,p)) || enemies.some((z) => same(z,p));
   function fruit() { let p = cell(); while (used(p)) p = cell(); food = {...p, rotten: Math.random() < .18}; }
   function enemy() { let p = cell(); while (used(p) || (Math.abs(p.x-10)<5 && Math.abs(p.y-10)<5)) p = cell(); return {...p, dx: Math.random()<.5?1:-1, dy:0, born:Date.now(), exploding:false, exploded:0}; }
-  function reset() { clearInterval(timer); timer = null; live = false; paused = false; ended = false; points = 0; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = {x:1,y:0}; next = {x:1,y:0}; enemies = Array.from({length:5}, enemy); fruit(); hud("Ready"); draw(); }
+  function reset() { clearInterval(timer); timer = null; live = false; paused = false; ended = false; points = 0; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = {x:1,y:0}; next = {x:1,y:0}; enemies = []; enemies = Array.from({length:5}, enemy); fruit(); hud("Ready"); draw(); }
   function turn(v) { if (v && !(v.x === -dir.x && v.y === -dir.y)) next = v; }
   function begin() { if (live) return; if (ended) reset(); live = true; paused = false; hud("Playing"); if (!timer) timer = setInterval(tick,140); }
   function toggle() { if (!live || ended) return; paused = !paused; hud(paused ? "Paused" : "Playing"); }
-  function over() { live = false; ended = true; clearInterval(timer); timer = null; if (points > best) { best = points; localStorage.setItem("snake-best",best); } hud("Game over"); draw(); }
+  function over() { live = false; ended = true; clearInterval(timer); timer = null; if (points > best) { best = points; storage.setBest(best); } hud("Game over"); draw(); }
   function moveEnemies(now) {
     enemies.forEach((e) => {
       if (e.exploding) { if (now-e.exploded >= 2000) Object.assign(e, enemy()); return; }
@@ -33,7 +37,7 @@
     snake.unshift(head);
     if (same(head,food)) { if (food.rotten) { snake.splice(Math.max(1,snake.length-2)); points=Math.max(0,points-5); } else points+=10; fruit(); } else snake.pop();
     if (enemies.some((e)=>e.exploding && Math.abs(e.x-head.x)<=1 && Math.abs(e.y-head.y)<=1)) return over();
-    if (points > best) { best=points; localStorage.setItem("snake-best",best); } hud("Playing"); draw();
+    if (points > best) { best=points; storage.setBest(best); } hud("Playing"); draw();
   }
   function block(px,py,color) { x.fillStyle=color; x.fillRect(px*u+2,py*u+2,u-4,u-4); }
   function draw() {
