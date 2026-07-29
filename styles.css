@@ -331,3 +331,18 @@ section p { line-height: 1.8; }
 #experience .experience-highlights li { color: var(--muted); font-size: .88rem; padding: .15rem 0; }
 #experience .experience-highlights li + li { border-top: 0; margin-top: .1rem; }
 #experience .experience-highlights strong { color: var(--accent); font-weight: 600; }
+
+
+
+/* Project keyword list */
+.project-list { font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; }
+.project-list strong { color: var(--accent); font-weight: 600; }
+
+.project-item { display: grid; gap: .35rem .9rem; grid-template-columns: minmax(0, 1fr) auto; }
+.project-title { color: var(--text); font-weight: 700; }
+.project-period { color: var(--yellow); font-size: .84rem; text-align: right; white-space: nowrap; }
+.project-detail { color: var(--muted); font-size: .88rem; grid-column: 1 / -1; }
+@media (max-width: 40rem) {
+.project-item { display: block; }
+.project-period, .project-detail { display: block; margin-top: .35rem; text-align: left; white-space: normal; }
+}
