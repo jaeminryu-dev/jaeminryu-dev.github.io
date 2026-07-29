@@ -10,12 +10,12 @@
 <body>
   <header class="site-header">
     <a class="brand" href="#top"><span class="prompt">~/</span> Jaemin Ryu</a>
-    <nav aria-label="Primary navigation">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">☰ <span>Menu</span></button>
+    <nav id="primary-navigation" aria-label="Primary navigation">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
       <a href="#education">Education</a>
       <a href="#skills">Skills</a>
-      <a href="#projects">Projects</a>
       <a href="#research">Research</a>
       <a href="#games">Games</a>
       <a href="#contact">Contact</a>
@@ -26,11 +26,6 @@
       <p class="eyebrow"><span>//</span> AI Enthusiast</p>
       <h1 id="hero-title">Jaemin Ryu</h1>
       <p>Developing and commercializing on-device AI technologies and products, with a focus on ASR and NLP.</p>
-    </section>
-    <section id="projects" aria-labelledby="projects-title">
-      <p class="section-kicker">01 / selected work</p>
-      <h2 id="projects-title">🧩 Projects</h2>
-      <p class="project-placeholder">Project details are being curated from confirmed source materials.</p>
     </section>
     <section id="experience" aria-labelledby="experience-title">
       <p class="section-kicker">01 / work</p><h2 id="experience-title">💼 Experience</h2>
@@ -56,7 +51,23 @@
     </section>
     <section id="games" aria-labelledby="games-title">
       <p class="section-kicker">05 / playground</p><h2 id="games-title">🎮 Games</h2>
-      <div class="game-shell"><div class="game-hud" aria-live="polite"><span>Score <strong id="score">0</strong></span><span>Best <strong id="high-score">0</strong></span><span id="game-status">Ready</span></div><canvas id="game-board" width="420" height="420" aria-label="Snake game board"></canvas><div class="game-actions"><button id="start-game" type="button">Start</button><button id="pause-game" type="button">Pause</button><button id="restart-game" type="button">Restart</button></div><div class="touch-controls" aria-label="Touch controls"><button type="button" data-direction="up" aria-label="Move up">↑</button><div><button type="button" data-direction="left" aria-label="Move left">←</button><button type="button" data-direction="down" aria-label="Move down">↓</button><button type="button" data-direction="right" aria-label="Move right">→</button></div></div><p class="game-help">Use Arrow keys or WASD. Space pauses the game. Avoid the walls, yourself, and enemy explosions. Rotten fruit shortens the snake.</p></div>
+      <div class="games-grid">
+        <article class="game-card">
+          <h3>🐍 Snake</h3>
+          <div class="game-shell"><div class="game-hud" aria-live="polite"><span>Score <strong id="score">0</strong></span><span>Best <strong id="high-score">0</strong></span><span id="game-status">Ready</span></div><canvas id="game-board" width="420" height="420" aria-label="Snake game board"></canvas><div class="game-actions"><button id="start-game" type="button">Start</button><button id="pause-game" type="button">Pause</button><button id="restart-game" type="button">Restart</button></div><div class="touch-controls" aria-label="Touch controls"><button type="button" data-direction="up" aria-label="Move up">↑</button><div><button type="button" data-direction="left" aria-label="Move left">←</button><button type="button" data-direction="down" aria-label="Move down">↓</button><button type="button" data-direction="right" aria-label="Move right">→</button></div></div><p class="game-help">Use Arrow keys or WASD. Space pauses the game. Avoid the walls, yourself, and enemy explosions. Rotten fruit shortens the snake.</p></div>
+          </div>
+        </article>
+        <article class="game-card">
+          <h3>🦖 Dino Runner</h3>
+          <div class="dino-shell">
+      <div class="game-hud" aria-live="polite"><span>Dino Score <strong id="dino-score">0</strong></span><span>Best <strong id="dino-best">0</strong></span><span id="dino-status">Ready</span></div>
+      <canvas id="dino-board" width="640" height="220" aria-label="Dino runner game board"></canvas>
+      <div class="game-actions dino-actions"><button id="dino-start" type="button">Start</button><button id="dino-pause" type="button">Pause</button><button id="dino-restart" type="button">Restart</button></div>
+      <button class="dino-jump" id="dino-jump" type="button">Jump</button>
+      <p class="game-help">Press Space or Arrow Up to jump. Use Arrow Down to duck. Avoid the cacti and survive as long as possible.</p>
+          </div>
+        </article>
+      </div>
     </section>
     <section id="contact" aria-labelledby="contact-title">
       <p class="section-kicker">06 / connect</p><h2 id="contact-title">📮 Contact</h2>
@@ -67,17 +78,3 @@
   <script src="script.js" defer></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

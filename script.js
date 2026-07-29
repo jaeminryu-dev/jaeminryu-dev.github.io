@@ -1,5 +1,18 @@
 "use strict";
 (() => {
+  const header = document.querySelector(".site-header");
+  const menuToggle = document.querySelector(".menu-toggle");
+  const nav = document.querySelector("#primary-navigation");
+  if (header && menuToggle && nav) {
+    menuToggle.addEventListener("click", () => {
+      const open = header.classList.toggle("menu-open");
+      menuToggle.setAttribute("aria-expanded", String(open));
+    });
+    nav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+      header.classList.remove("menu-open");
+      menuToggle.setAttribute("aria-expanded", "false");
+    }));
+  }
   const c = document.querySelector("#game-board");
   if (!c) return;
   const x = c.getContext("2d"), n = 21, u = c.width / n;
@@ -16,7 +29,7 @@
   const used = (p) => snake.some((z) => same(z,p)) || enemies.some((z) => same(z,p));
   function fruit() { let p = cell(); while (used(p)) p = cell(); food = {...p, rotten: Math.random() < .18}; }
   function enemy() { let p = cell(); while (used(p) || (Math.abs(p.x-10)<5 && Math.abs(p.y-10)<5)) p = cell(); return {...p, dx: Math.random()<.5?1:-1, dy:0, born:Date.now(), exploding:false, exploded:0}; }
-  function reset() { clearInterval(timer); timer = null; live = false; paused = false; ended = false; points = 0; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = {x:1,y:0}; next = {x:1,y:0}; enemies = []; enemies = Array.from({length:5}, enemy); fruit(); hud("Ready"); draw(); }
+  function reset() { clearInterval(timer); timer = null; live = false; paused = false; ended = false; points = 0; snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}]; dir = {x:1,y:0}; next = {x:1,y:0}; enemies = []; enemies = Array.from({length:1}, enemy); fruit(); hud("Ready"); draw(); }
   function turn(v) { if (v && !(v.x === -dir.x && v.y === -dir.y)) next = v; }
   function begin() { if (live) return; if (ended) reset(); live = true; paused = false; hud("Playing"); if (!timer) timer = setInterval(tick,140); }
   function toggle() { if (!live || ended) return; paused = !paused; hud(paused ? "Paused" : "Playing"); }
@@ -51,4 +64,46 @@
   document.addEventListener("keydown",(e)=>{if(keys[e.key]){e.preventDefault();turn(keys[e.key]);}if(e.key===" "){e.preventDefault();toggle();}});
   document.querySelectorAll("[data-direction]").forEach((b)=>b.addEventListener("pointerdown",(e)=>{e.preventDefault();turn({up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}}[b.dataset.direction]);}));
   start.addEventListener("click",begin); pause.addEventListener("click",toggle); restart.addEventListener("click",()=>{reset();begin();}); reset();
+})();
+
+
+
+
+
+// Lightweight offline dino runner
+(() => {
+  const c = document.querySelector("#dino-board");
+  if (!c) return;
+  const x = c.getContext("2d"), width = c.width, ground = 178;
+  const scoreEl = document.querySelector("#dino-score"), bestEl = document.querySelector("#dino-best"), statusEl = document.querySelector("#dino-status");
+  const start = document.querySelector("#dino-start"), pause = document.querySelector("#dino-pause"), restart = document.querySelector("#dino-restart"), jumpButton = document.querySelector("#dino-jump");
+  const storage = { get() { try { return Number(localStorage.getItem("dino-best") || 0); } catch (_) { return 0; } }, set(value) { try { localStorage.setItem("dino-best", value); } catch (_) {} } };
+  const dino = { x: 58, y: ground - 42, w: 30, h: 42, vy: 0, duck: false };
+  let timer = null, running = false, paused = false, ended = false, score = 0, best = storage.get(), speed = 6, spawn = 55, obstacles = [];
+  const hud = (state) => { scoreEl.textContent = Math.floor(score); bestEl.textContent = best; statusEl.textContent = state; };
+  const reset = () => { clearInterval(timer); timer = null; running = false; paused = false; ended = false; score = 0; speed = 6; spawn = 55; obstacles = []; dino.y = ground - dino.h; dino.vy = 0; dino.duck = false; hud("Ready"); draw(); };
+  const jump = () => { if (ended) reset(); if (!running) begin(); if (dino.y >= ground - dino.h - .5) dino.vy = -13; };
+  const begin = () => { if (running) return; if (ended) reset(); running = true; paused = false; hud("Running"); if (!timer) timer = setInterval(tick, 30); };
+  const toggle = () => { if (!running || ended) return; paused = !paused; hud(paused ? "Paused" : "Running"); };
+  const over = () => { running = false; ended = true; clearInterval(timer); timer = null; if (Math.floor(score) > best) { best = Math.floor(score); storage.set(best); } hud("Game over"); draw(); };
+  const hit = (a,b) => a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;
+  const addObstacle = () => { const h = 24 + Math.floor(Math.random()*24), w = 13 + Math.floor(Math.random()*13); obstacles.push({x: width + 8, y: ground-h, w, h}); spawn = 65 + Math.floor(Math.random()*65); };
+  function tick() {
+    if (!running || paused) return;
+    dino.vy += .78; dino.y += dino.vy; if (dino.y > ground-dino.h) { dino.y = ground-dino.h; dino.vy = 0; }
+    if (--spawn <= 0) addObstacle(); obstacles.forEach((o) => { o.x -= speed; }); obstacles = obstacles.filter((o) => o.x + o.w > 0);
+    const box = {x:dino.x+4, y:dino.y+(dino.duck?12:3), w:dino.w-8, h:dino.duck?dino.h-12:dino.h-5}; if (obstacles.some((o) => hit(box,o))) return over();
+    score += .12; speed = Math.min(11, 6 + score/180); if (Math.floor(score) > best) { best=Math.floor(score); storage.set(best); } hud("Running"); draw();
+  }
+  const block = (px,py,w,h,color) => { x.fillStyle=color; x.fillRect(px,py,w,h); };
+  function draw() {
+    x.clearRect(0,0,width,c.height); x.fillStyle="#0d1a2d"; x.fillRect(0,0,width,c.height); x.strokeStyle="#315477"; x.setLineDash([5,5]); x.beginPath(); x.moveTo(0,ground+1); x.lineTo(width,ground+1); x.stroke(); x.setLineDash([]);
+    const bodyHeight = dino.duck ? 28 : dino.h; block(dino.x,dino.y+(dino.duck?14:0),dino.w,bodyHeight,"#6ee7b7"); block(dino.x+dino.w-3,dino.y+(dino.duck?14:0),12,12,"#2ea879"); block(dino.x+19,dino.y+(dino.duck?17:3),3,3,"#08111f");
+    obstacles.forEach((o) => { block(o.x,o.y,o.w,o.h,"#e35d6a"); block(o.x+Math.floor(o.w/2)-2,o.y-8,4,9,"#e35d6a"); });
+    x.fillStyle="#8da2bc"; x.font="12px ui-monospace, monospace"; x.fillText("RUN", 12, 22);
+  }
+  document.addEventListener("keydown", (e) => { if (e.key === " " || e.key === "ArrowUp") { e.preventDefault(); jump(); } if (e.key === "ArrowDown") { e.preventDefault(); dino.duck = true; } if (e.key === "p") toggle(); });
+  document.addEventListener("keyup", (e) => { if (e.key === "ArrowDown") dino.duck = false; });
+  c.addEventListener("pointerdown", (e) => { e.preventDefault(); jump(); });
+  jumpButton.addEventListener("click", jump); start.addEventListener("click", begin); pause.addEventListener("click", toggle); restart.addEventListener("click", () => { reset(); begin(); }); reset();
 })();
